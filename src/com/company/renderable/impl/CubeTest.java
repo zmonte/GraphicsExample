@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Admin
+ * User: Zach Monte
  * Date: 7/9/13
  * Time: 10:59 PM
  * To change this template use File | Settings | File Templates.
@@ -30,6 +30,7 @@ public class CubeTest extends Renderable {
     private double size = 10.0;
     private double resolution = 0.5;
     private Vector2d lastPoint;
+    private int shade = 0;
 
     public CubeTest() {
         /*for (int i = -5; i <= 5; i++) {
@@ -40,17 +41,40 @@ public class CubeTest extends Renderable {
                 }
             }
         }*/
+        double min = 0, max = 0;
         for (double i = -size; i <= size; i += resolution) {
             for (double ii = -size; ii <= size; ii += resolution) {
                 for (double iii = -size; iii <= size; iii += resolution) {
-                    if (Math.abs(5 - (Math.abs(Math.sqrt((i * i) + (ii * ii) + (iii * iii))))) <= resolution)
+                    //if (Math.abs(5.0 - (Math.abs(Math.sqrt((i * i) + (ii * ii) + (iii * iii))))) <= resolution)
+                    //    cube.add(new Vector3d(i * padFactor, ii * padFactor, iii * padFactor));
+                    //if (Math.abs(i) <= 5.0 - resolution || Math.abs(ii) <= 5.0 - resolution || Math.abs(iii) <= 5.0 - resolution)
+                    //   cube.add(new Vector3d(i * padFactor, ii * padFactor, iii * padFactor));
+                    if (Math.abs(ii - Math.sin(i)) <= resolution)
                         cube.add(new Vector3d(i * padFactor, ii * padFactor, iii * padFactor));
-                    //if (Math.abs(i) == 5.0 || Math.abs(ii) == 5.0 || Math.abs(iii) == 5.0)
-                        //cube.add(new Vector3d(i * padFactor, ii * padFactor, iii * padFactor));
+
+                    if (i * padFactor < min) {
+                        min = i * padFactor;
+                    }
+                    if (ii * padFactor < min) {
+                        min = ii * padFactor;
+                    }
+                    if (iii * padFactor < min) {
+                        min = iii * padFactor;
+                    }
+                    if (i * padFactor > max) {
+                        min = i * padFactor;
+                    }
+                    if (ii * padFactor > max) {
+                        min = ii * padFactor;
+                    }
+                    if (iii * padFactor > max) {
+                        min = iii * padFactor;
+                    }
                 }
             }
         }
         canRender = true;
+        System.out.println("Min: " + min + "Max: " + max);
     }
 
     @Override
@@ -63,8 +87,13 @@ public class CubeTest extends Renderable {
     public void render(Graphics2D g) {
         if (canRender)
             for (Vector3d point : cube) {
-                g.setColor(new Color(54, 76, (int) Math.abs(point.z / 100.0 * 250.0 % 250), 150));
-                drawPoint(renderEngine3D.project(renderEngine3D.rotX(renderEngine3D.rotY(renderEngine3D.rotZ(point, theta), theta), theta), window.getWidth() / 2, window.getHeight() / 2), g);
+                shade = (int) ((point.z + 500.0) / 10.0) % 255;
+                //System.out.println("Point " + point.z + "Shade " + shade + "calc " + ((point.z + 500.0) / 10.0));
+                //System.out.println(point.z);
+                point = renderEngine3D.rotX(renderEngine3D.rotY(renderEngine3D.rotZ(point, theta), theta), theta);
+                g.setColor(new Color(shade, shade, shade, 150));
+                //drawPoint(renderEngine3D.project(renderEngine3D.rotX(renderEngine3D.rotY(renderEngine3D.rotZ(point, theta), theta), theta), window.getWidth() / 2, window.getHeight() / 2), g);
+                drawPoint(renderEngine3D.project(point,  window.getWidth() / 2, window.getHeight() / 2), g);
             }
     }
 

@@ -66,10 +66,8 @@ public class Engine extends Thread {
             for (Renderable renderable : Window.objects) {
                 renderable.tick(isPaused ? 0 : delta);
             }
-
             canvas.render();
         }
-
         window.dispose();
     }
 }

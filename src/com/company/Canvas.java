@@ -30,6 +30,7 @@ public class Canvas extends java.awt.Canvas {
     private BufferedImage bi;
     private GlowFilter glow = new GlowFilter();
     private GaussianFilter gaussian = new GaussianFilter();
+    private MotionBlurFilter motionBlur = new MotionBlurFilter();
 
     public Canvas(Window window) {
         this.window = window;
@@ -110,6 +111,9 @@ public class Canvas extends java.awt.Canvas {
 
                 bi.getGraphics().drawImage(vi.getSnapshot(), 0, 0, getWidth(), getHeight(), null);
                 bi = vi.getSnapshot();
+                // gaussian.filter(bi, bi);
+                // glow.filter(bi, bi);
+                // motionBlur.filter(bi, bi);
                 g.drawImage(bi, 0, 0, getWidth(), getHeight(), null);
                 g.dispose();
                 Toolkit.getDefaultToolkit().sync();
